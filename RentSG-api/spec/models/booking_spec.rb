@@ -4,6 +4,6 @@ require 'rails_helper'
 RSpec.describe Booking, type: :model do
   # Association test
   # ensure an booking record belongs to a single user and item records
-  it { should belong_to(:user) }
-  it { should belong_to(:item) }
+  it { is_expected.to belong_to(:user) }
+  it { is_expected.to belong_to(:item) }
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180307074417) do
+ActiveRecord::Schema.define(version: 20180307125116) do
 
   create_table "bookings", force: :cascade do |t|
     t.integer "user_id"
@@ -37,7 +37,10 @@ ActiveRecord::Schema.define(version: 20180307074417) do
     t.text "rw_text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "reviewable_type"
+    t.integer "reviewable_id"
     t.index ["item_id"], name: "index_reviews_on_item_id"
+    t.index ["reviewable_type", "reviewable_id"], name: "index_reviews_on_reviewable_type_and_reviewable_id"
     t.index ["user_id"], name: "index_reviews_on_user_id"
   end
 

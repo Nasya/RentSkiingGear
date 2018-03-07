@@ -1,5 +1,6 @@
 class Item < ApplicationRecord
+  include Reviewable
+
   belongs_to :user
-  has_many :reviews, dependent: :destroy
-  has_one :booking, dependent: :destroy
+  has_many :bookings, dependent: :destroy
 end

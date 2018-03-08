@@ -8,5 +8,6 @@ RSpec.describe Review, type: :model do
   it { is_expected.to have_db_column(:reviewable_type).of_type(:string) }
 
   # and belongs to a reviewable records
+  it { is_expected.to belong_to(:user) }
   it { is_expected.to belong_to(:reviewable) }
 end

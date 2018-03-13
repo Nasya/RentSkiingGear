@@ -12,9 +12,11 @@ RSpec.describe Review, type: :model do
   it { is_expected.to belong_to(:reviewable) }
 
   context 'when create new review' do
-    let(:author) { User.create(name: 'Kate') }
-    let(:user) { User.create(name: 'Marie') }
-    let(:item) { user.items.create(name: 'Snowboard') }
+    let(:city) { City.create(name: 'Lviv') }
+    let(:author) { city.users.create!(name: 'Kate') }
+    let(:user) { city.users.create!(name: 'Marie') }
+    let(:item) { user.items.create!(name: 'Snowboard') }
+    let(:item2) { user.items.create!(name: 'board') }
 
     it 'shows it in the received reviews list for item' do
       item_review = author.authored_reviews.create(reviewable: item, rw_text: 'Best board')
@@ -29,7 +31,7 @@ RSpec.describe Review, type: :model do
     end
 
     it 'shows it in the authored reviews list' do
-      review = author.authored_reviews.create(reviewable: user, rw_text: 'Best')
+      review = author.authored_reviews.create(reviewable: user, rw_text: 'Best board')
       expect(author.authored_reviews).to eq([review])
       expect(review).to be_persisted
     end

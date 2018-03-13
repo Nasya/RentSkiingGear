@@ -11,18 +11,27 @@ RSpec.describe Review, type: :model do
   it { is_expected.to belong_to(:user) }
   it { is_expected.to belong_to(:reviewable) }
 
-  context 'create review to user and item' do
-    it 'shows reviews from one user to another and some item' do
-      kate = User.create(name: 'Kate', email: 'asd@gmail.com',
-                         phone: '123123', address: 'Lviv')
-      marie = User.create(name: 'Marie', email: 'ad@gmail.com',
-                          phone: '234321', address: 'Kyiv')
-      snowboard = marie.items.create(name: 'Snowboard')
-      rw1 = kate.reviews.create(reviewable: marie, rw_text: 'Nice')
-      rw2 = kate.reviews.create(reviewable: snowboard, rw_text: 'Best board')
-      rw3 = marie.authored_reviews.create(reviewable: kate, rw_text: 'Nice communication')
-      expect(kate.reviews).to eq([rw1, rw2])
-      expect(kate.authored_reviews).to eq([rw3])
+  context 'when create new review' do
+    let(:author) { User.create(name: 'Kate') }
+    let(:user) { User.create(name: 'Marie') }
+    let(:item) { user.items.create(name: 'Snowboard') }
+
+    it 'shows it in the received reviews list for item' do
+      item_review = author.authored_reviews.create(reviewable: item, rw_text: 'Best board')
+      expect(item.reviews).to eq([item_review])
+      expect(item_review).to be_persisted
+    end
+
+    it 'shows it in the received reviews list for user' do
+      user_review = author.authored_reviews.create(reviewable: user, rw_text: 'Nice')
+      expect(user.reviews).to eq([user_review])
+      expect(user_review).to be_persisted
+    end
+
+    it 'shows it in the authored reviews list' do
+      review = author.authored_reviews.create(reviewable: user, rw_text: 'Best')
+      expect(author.authored_reviews).to eq([review])
+      expect(review).to be_persisted
     end
   end
 end

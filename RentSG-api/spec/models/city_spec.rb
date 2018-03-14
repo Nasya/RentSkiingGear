@@ -7,25 +7,19 @@ RSpec.describe City, type: :model do
   it { is_expected.to have_many(:users).dependent(:destroy) }
 
   context 'when create new user' do
-    let(:city) { City.create(name: 'Kyiv') }
-    let(:user) { city.users.create(name: 'Marie') }
+    let(:city) { City.create(name: 'Kyiv', id: 4) }
 
-    it 'shows it in the received users list for city' do
-      users_list = city.users.create(name: 'Mike')
-      expect(city.users).to eq([users_list])
-      expect(users_list).to be_persisted
+    it 'shows it in the users list for city' do
+      user = city.users.create(name: 'Mike')
+      expect(city.users).to eq([user])
+      expect(user).to be_persisted
     end
 
-    it 'shows it in the received item list for city' do
-      items_list = user.items.create(name: 'some_item')
-      expect(city.items).to eq([items_list])
-      expect(items_list).to be_persisted
-    end
+    it 'shows items of the user in the items list for city' do
+      user = city.users.create(name: 'Mike')
+      5.times { user.items.create(name: 'some_item') }
 
-    it 'shows it in the received item list for city' do
-      item1 = user.items.create(name: 'some_item')
-      item2 = user.items.create(name: 'another_item')
-      expect(city.items).to eq([item1, item2])
+      expect(city.items).to eq(user.items)
     end
   end
 end
